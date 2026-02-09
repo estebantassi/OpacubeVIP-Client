@@ -5,23 +5,23 @@ function LoginPage() {
 
     return (
         <>
-        <Button onClick={() => window.location.href = API_URL + "/auth/google"}>
+        <Button onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=google"}>
             Login with Google
         </Button>
 
-        <Button onClick={() => window.location.href = API_URL + "/auth/discord"}>
+        <Button onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=discord"}>
             Login with Discord
         </Button>
 
-        <Button onClick={() => window.location.href = API_URL + "/auth/github"}>
+        <Button onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=github"}>
             Login with Github
         </Button>
 
-        <Button onClick={() => window.location.href = API_URL + "/auth/twitch"}>
+        <Button onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=twitch"}>
             Login with Twitch
         </Button>
 
-        <Button onClick={() => window.location.href = API_URL + "/auth/gitlab"}>
+        <Button onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=gitlab"}>
             Login with Gitlab
         </Button>
         </>

@@ -7,8 +7,6 @@ import { useToast } from "./ToastContext";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const SECURE = import.meta.env.VITE_SECURE === 'true';
-
     const [user, setUser] = useState(Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null);
 
     const [searchParams] = useSearchParams();
@@ -22,8 +20,7 @@ export const AuthProvider = ({ children }) => {
 
         if (status == 'success') {
             navigate(pathname, { replace: true });
-            const data = searchParams.get("data");
-            if (data) UpdateUser(JSON.parse(data));
+            UpdateUser(JSON.parse(Cookies.get("user")));
             AddToast("Successfully logged in", "success");
         } else if (status == 'error') {
             const error = searchParams.get("error");
@@ -34,9 +31,7 @@ export const AuthProvider = ({ children }) => {
     const UpdateUser = async (newUser) => {
         setUser(newUser);
 
-        if (newUser) {
-            Cookies.set("user", JSON.stringify(newUser), { expires: 7, secure: SECURE, sameSite: "Strict" });
-        } else {
+        if (!newUser) {
             await axios.post('/auth/refresh/logout', {
                 withCredentials: true
             });

@@ -32,11 +32,13 @@ export const AuthProvider = ({ children }) => {
         setUser(newUser);
 
         if (!newUser) {
-            await axios.post('/auth/refresh/logout', {
-                withCredentials: true
-            });
+            try {
+                await axios.post('/auth/refresh/logout', {
+                    withCredentials: true
+                });
+            } catch (err) {}
 
-            Cookies.remove("user");
+            Cookies.remove("user", { domain: ".opacube.vip", path: "/" });
             navigate("/home");
             AddToast("You have been logged out", "error");
         }

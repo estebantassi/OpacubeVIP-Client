@@ -3,7 +3,7 @@ import { useToast } from "../contexts/ToastContext";
 
 function ProfilePage() {
 
-    const { user, IsAuthenticated } = useAuth();
+    const { user, avatar, IsAuthenticated } = useAuth();
 
     const { AddToast } = useToast();
 
@@ -17,6 +17,7 @@ function ProfilePage() {
         <h1>Profile</h1>
         {user?.username && <h2>{user.username}</h2>}
         {user?.uuid && <h2>{user.uuid}</h2>}
+        {avatar && <img src={avatar} alt="avatar"/>}
 
         <button onClick={check}>Check auth</button>
         </>

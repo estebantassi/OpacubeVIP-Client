@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
             AddToast("Successfully logged in", "success");
         } else if (status == 'error') {
             const error = searchParams.get("error");
+            navigate(pathname, { replace: true });
             AddToast(error ?? "Unknown error", "error");
         }
     }, []);
@@ -38,7 +39,9 @@ export const AuthProvider = ({ children }) => {
                 });
             } catch (err) {}
 
-            Cookies.remove("user", { domain: ".opacube.vip", path: "/" });
+            const domain = "." + new URL(window.location.origin).hostname;
+
+            Cookies.remove("user", { domain, path: "/" });
             navigate("/home");
             AddToast("You have been logged out", "error");
         }

@@ -101,6 +101,7 @@ export const AuthProvider = ({ children }) => {
     let contextData = {
         user,
         avatar,
+        setAvatar,
         IsAuthenticated,
         UpdateUser
     };

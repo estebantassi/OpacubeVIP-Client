@@ -9,7 +9,7 @@ function ProfilePage() {
 
     const check = async() => {
         const isauth = await IsAuthenticated();
-        AddToast(`You are ${isauth && "not "}authenticated`, isauth ? "success" : "warning");
+        AddToast(`You are ${isauth ? "" : "not "}authenticated`, isauth ? "success" : "warning");
     };
 
     return (

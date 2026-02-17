@@ -26,7 +26,7 @@ export const Toast = ({ text, type, duration }) => {
 
     return (
         <>
-            <div className={`bg-white flex flex-col rounded font-medium shadow-lg`}>
+            <div className={`bg-accent flex flex-col rounded font-medium shadow-lg`}>
                 <div
                     className={`flex gap-2 items-center py-2 px-4`}
                 >

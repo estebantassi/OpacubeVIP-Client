@@ -14,35 +14,37 @@ import LogoutPage from './pages/Logout.jsx';
 import AccountSettingsPage from './pages/AccountSettings.jsx';
 import { ModalProvider } from './contexts/ModalContext.jsx';
 import { ToastProvider } from './contexts/ToastContext.jsx';
+import SignupPage from './pages/Signup.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <ToastProvider>
-      <ModalProvider>
-        <AuthProvider>
+	<BrowserRouter>
+		<ToastProvider>
+			<ModalProvider>
+				<AuthProvider>
 
-          <Routes>
+					<Routes>
 
-            <Route element={<Anyroute />}>
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="*" element={<Navigate to='/home' replace />} />
-              <Route path="/home" element={<HomePage />} />
-            </Route>
+						<Route element={<Anyroute />}>
+							<Route path="/" element={<Navigate to="/home" replace />} />
+							<Route path="*" element={<Navigate to='/home' replace />} />
+							<Route path="/home" element={<HomePage />} />
+						</Route>
 
-            <Route element={<Unprotectedroute />}>
-              <Route path="/login" element={<LoginPage />} />
-            </Route>
+						<Route element={<Unprotectedroute />}>
+							<Route path="/login" element={<LoginPage />} />
+							<Route path="/signup" element={<SignupPage />} />
+						</Route>
 
-            <Route element={<Protectedroute />}>
-              <Route path="/logout" element={<LogoutPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/accountsettings" element={<AccountSettingsPage />} />
-            </Route>
+						<Route element={<Protectedroute />}>
+							<Route path="/logout" element={<LogoutPage />} />
+							<Route path="/profile" element={<ProfilePage />} />
+							<Route path="/accountsettings" element={<AccountSettingsPage />} />
+						</Route>
 
-          </Routes>
+					</Routes>
 
-        </AuthProvider>
-      </ModalProvider>
-    </ToastProvider>
-  </BrowserRouter>
+				</AuthProvider>
+			</ModalProvider>
+		</ToastProvider>
+	</BrowserRouter>
 );

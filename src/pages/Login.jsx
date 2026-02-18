@@ -56,7 +56,7 @@ function LoginPage() {
             AddToast(checkPassword.data.message, "success");
             navigate("/profile");
         } catch (err) {
-            turnstile.reset();
+            turnstile?.reset();
             AddToast(err?.response?.data?.message ?? "Error", "error");
         }
     };

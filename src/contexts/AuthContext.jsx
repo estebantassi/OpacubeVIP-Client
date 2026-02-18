@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem("avatar");
             Cookies.remove("user");
             navigate("/home");
-            AddToast("You have been logged out", "error");
+            AddToast("You have been logged out", "info");
         }
     };
 

@@ -18,6 +18,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router": "^7.13.0",
+    "react-turnstile": "^1.1.5",
     "secure-remote-password": "^0.3.1",
     "tailwindcss": "^4.1.18"
   },

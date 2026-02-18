@@ -5,9 +5,15 @@ import srp from "secure-remote-password/client";
 import { useToast } from '../contexts/ToastContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router';
+import { Turnstile, useTurnstile } from "react-turnstile";
 
 function LoginPage() {
     const API_URL = import.meta.env.VITE_API_URL;
+
+    const TURNSTILE = import.meta.env.VITE_TURNSTILE;
+    const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
+    const turnstile = useTurnstile();
+    const [turnstileToken, setTurnstileToken] = useState(null);
 
     const { AddToast } = useToast();
     const { UpdateUser, setAvatar } = useAuth();
@@ -15,14 +21,15 @@ function LoginPage() {
 
     const [userData, setUserData] = useState({
         email: "",
-        password: "",
+        password: ""
     });
+
 
     const Login = async (e) => {
         e.preventDefault();
 
         try {
-            const fetchSRP = await Axios.post('/auth/loginstart', { email: userData.email }, {
+            const fetchSRP = await Axios.post('/auth/loginstart', { email: userData.email, turnstileToken }, {
                 withCredentials: true
             });
 
@@ -49,6 +56,7 @@ function LoginPage() {
             AddToast(checkPassword.data.message, "success");
             navigate("/profile");
         } catch (err) {
+            turnstile.reset();
             AddToast(err?.response?.data?.message ?? "Error", "error");
         }
     };
@@ -91,7 +99,16 @@ function LoginPage() {
 
                     <Input type="email" className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Email' value={userData.email} onChange={(e) => { setUserData(prev => ({ ...prev, email: e.target.value })); }} />
                     <Input validate={false} type="password" className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Password' value={userData.password} onChange={(e) => { setUserData(prev => ({ ...prev, password: e.target.value })); }} />
-                    <Button type='submit' style='submit' className='mt-4 mb-4 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl mx-4'>
+                    
+                    {TURNSTILE == "true" && 
+                        <Turnstile
+                        sitekey={TURNSTILE_KEY}
+                        onVerify={(token) => {
+                            setTurnstileToken(token);
+                        }}
+                    />}
+
+                    <Button disabled={!turnstileToken && TURNSTILE == "true"} type='submit' style='submit' className='mt-4 mb-4 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl mx-4'>
                         Login
                     </Button>
 

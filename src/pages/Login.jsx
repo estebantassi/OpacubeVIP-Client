@@ -7,11 +7,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router';
 import { Turnstile, useTurnstile } from "react-turnstile";
 
-function LoginPage() {
-    const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
+const TURNSTILE = import.meta.env.VITE_TURNSTILE;
+const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
 
-    const TURNSTILE = import.meta.env.VITE_TURNSTILE;
-    const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
+function LoginPage() {
     const turnstile = useTurnstile();
     const [turnstileToken, setTurnstileToken] = useState(null);
 

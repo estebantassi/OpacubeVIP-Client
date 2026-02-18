@@ -5,8 +5,14 @@ import Axios from '../api/Axios';
 import { useToast } from '../contexts/ToastContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router';
+import Turnstile, { useTurnstile } from 'react-turnstile';
+
+const TURNSTILE = import.meta.env.VITE_TURNSTILE;
+const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
 
 function SignupPage() {
+    const turnstile = useTurnstile();
+    const [turnstileToken, setTurnstileToken] = useState(null);
 
     const { AddToast } = useToast();
     const { UpdateUser, setAvatar } = useAuth();
@@ -50,7 +56,7 @@ function SignupPage() {
             const srpVerifier = srp.deriveVerifier(srpPrivatekey);
 
             const { password, passwordcheck, ...data } = userData;
-            await Axios.post('/auth/signup', { ...data, srpSalt, srpVerifier }, {
+            await Axios.post('/auth/signup', { ...data, srpSalt, srpVerifier, turnstileToken }, {
                 withCredentials: true
             });
 
@@ -110,7 +116,16 @@ function SignupPage() {
                     <Input type="password" setValid={(isValid) => setValidity(v => ({ ...v, password: isValid })) } className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Password' value={userData.password} onChange={(e) => { setUserData(prev => ({ ...prev, password: e.target.value })); }}/>
                     <Input type="password" setValid={(isValid) => setValidity(v => ({ ...v, passwordcheck: isValid })) } className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Password verification' value={userData.passwordcheck} onChange={(e) => { setUserData(prev => ({ ...prev, passwordcheck: e.target.value })); }}/>
                     <p className='text-red-500'>{error || "\u00A0"}</p>
-                    <Button type='submit' style='submit' disabled={disabled} className='mb-6 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl'>
+
+                    {TURNSTILE == "true" && 
+                        <Turnstile
+                        sitekey={TURNSTILE_KEY}
+                        onVerify={(token) => {
+                            setTurnstileToken(token);
+                        }}
+                    />}
+
+                    <Button type='submit' style='submit' disabled={disabled || (!turnstileToken && TURNSTILE == "true")} className='mb-6 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl'>
                         Signup
                     </Button>
 

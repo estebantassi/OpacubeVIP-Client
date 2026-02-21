@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router';
 import { AuthProvider } from './contexts/AuthContext.jsx';
@@ -15,6 +14,8 @@ import AccountSettingsPage from './pages/AccountSettings.jsx';
 import { ModalProvider } from './contexts/ModalContext.jsx';
 import { ToastProvider } from './contexts/ToastContext.jsx';
 import SignupPage from './pages/Signup.jsx';
+import TermsOfServicesPage from './pages/TermsOfServices.jsx';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage.jsx'; // Brave blocks the filename "privacypolicy"
 
 createRoot(document.getElementById('root')).render(
 	<BrowserRouter>
@@ -28,6 +29,12 @@ createRoot(document.getElementById('root')).render(
 							<Route path="/" element={<Navigate to="/home" replace />} />
 							<Route path="*" element={<Navigate to='/home' replace />} />
 							<Route path="/home" element={<HomePage />} />
+
+							<Route path="/tos" element={<Navigate to="/terms-of-services" replace />} />
+							<Route path="/terms-of-services" element={<TermsOfServicesPage />} />
+
+							<Route path="/pp" element={<Navigate to="/privacy-policy" replace />} />
+							<Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
 						</Route>
 
 						<Route element={<Unprotectedroute />}>

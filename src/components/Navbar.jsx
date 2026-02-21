@@ -8,7 +8,9 @@ function Navbar() {
     return (
         <>
             <nav className={`bg-content flex justify-center [&>*]:p-4 [&>*:hover]:bg-accent  [&>*]:transition-colors`}>
-                <NavLink to="/home">Home</NavLink>
+                <NavLink   className={({ isActive }) =>
+                    isActive ? "text-blue-500 font-bold" : ""
+                } to="/home">Home</NavLink>
                 {!user && <NavLink to="/login">Login</NavLink>}
                 {!user && <NavLink to="/signup">Signup</NavLink>}
 

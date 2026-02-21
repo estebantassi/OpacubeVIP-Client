@@ -1,7 +1,7 @@
-import { Outlet, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
-import Navbar from "../components/Navbar";
+import Anyroute from "./AnyRoute";
 
 function Protectedroute() {
     const { user } = useAuth();
@@ -11,7 +11,7 @@ function Protectedroute() {
         if (!user) navigate("/login");
     }, []);
 
-    return ( user && <> <Navbar /> <Outlet /> </> );
+    return ( user && <Anyroute/> );
 }
 
 export default Protectedroute;

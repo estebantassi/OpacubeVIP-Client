@@ -3,13 +3,13 @@ function TermsOfServicesPage() {
     return (
         <>
             <div className="flex justify-center">
-                <div className="rounded-xl m-4 p-10 bg-content flex flex-col gap-5 w-[50vw] items-center [&>*]:w-full">
+                <div className="text-sm lg:text-base sm:rounded-xl p-10 bg-content flex flex-col gap-5 sm:m-4 lg:w-[50vw] sm:w-[75vw] w-full items-center [&>*]:w-full [&>h2]:text-lg [&>h2:lg]:text-2xl [&>h2]:font-bold">
 
-                    <h1 className="text-5xl font-bold">Terms of Services</h1>
+                    <h1 className="text-3xl lg:text-5xl font-bold">Terms of Services</h1>
 
-                    <p className="text-xl font-bold">By creating an account, you agree to the terms of services below.</p>
+                    <p className="text-base lg:text-xl font-bold">By creating an account, you agree to the terms of services below.</p>
 
-                    <h2 className="text-2xl font-bold">1. Eligibility</h2>
+                    <h2>1. Eligibility</h2>
                     <p>
                         You represent and warrant that you are 18 years of age or older. Users under 18 must not create an account.
                         If we become aware that a user is underage, we reserve the right to restrict, suspend or permanently delete the account without notice.
@@ -20,7 +20,7 @@ function TermsOfServicesPage() {
                         If we become aware of such activity, we reserve the right to restrict, suspend or permanently delete the account without notice.
                     </p>
 
-                    <h2 className="text-2xl font-bold">2. Account & Security</h2>
+                    <h2>2. Account & Security</h2>
 
                     <p>
                         Users are fully responsible for their account, the content they post, and the content they interact with.
@@ -37,7 +37,7 @@ function TermsOfServicesPage() {
                         <p>-We recommend using our own authentication system.</p>
                     </div>
 
-                    <h2 className="text-2xl font-bold">3. User Content & Conduct</h2>
+                    <h2>3. User Content & Conduct</h2>
 
                     <div>
                         <p>Prohibited content:</p>
@@ -56,7 +56,7 @@ function TermsOfServicesPage() {
                         By posting content, you grant us a non-exclusive, worldwide license to host and display that content within the platform.
                     </p>
 
-                    <h2 className="text-2xl font-bold">4. Moderation & Termination</h2>
+                    <h2>4. Moderation & Termination</h2>
 
                     <p>
                         All of the content you remove is instantly (or almost) removed from our platform.
@@ -75,7 +75,7 @@ function TermsOfServicesPage() {
                         We are under no obligation to keep your content or data forever.
                     </p>
 
-                    <h2 className="text-2xl font-bold">5. Limitation of Liability</h2>
+                    <h2>5. Limitation of Liability</h2>
 
                     <p>
                         Our services are provided “as is” and “as available.” We make no warranties, express or implied, regarding the availability, reliability, or suitability of our services.
@@ -91,13 +91,13 @@ function TermsOfServicesPage() {
                         You agree to comply with all applicable laws when using our services, and we are not responsible for any legal consequences resulting from your misuse.
                     </p>
 
-                    <h2 className="text-2xl font-bold">6. Changes to Terms</h2>
+                    <h2>6. Changes to Terms</h2>
 
                     <p>
                         The ToS are subject to change. By agreeing to the ToS, you agree to keep up with the changes and follow them.
                     </p>
 
-                    <h2 className="text-2xl font-bold">7. Governing Law</h2>
+                    <h2>7. Governing Law</h2>
 
                     <p>
                         These Terms are governed by the laws of France, per the owner's country of Residence. Any disputes shall be subject to the exclusive jurisdiction of the French courts.

@@ -1,5 +1,5 @@
-import { Button } from "../components/CustomComponents";
-import { useModal } from "../contexts/ModalContext";
+import { Button } from "../components/CustomComponents.js";
+import { useModal } from "../contexts/ModalContext.js";
 
 function AccountSettingsPage() {
 
@@ -13,7 +13,7 @@ function AccountSettingsPage() {
         <>
         <h1>Settings</h1>
 
-        <Button className="self-end" onClick={request} type="danger">Delete my account</Button>
+        <Button className="self-end" onClick={request} style="danger">Delete my account</Button>
         </>
     );
 }

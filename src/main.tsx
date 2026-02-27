@@ -1,23 +1,23 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router';
-import { AuthProvider } from './contexts/AuthContext.jsx';
+import { AuthProvider } from './contexts/AuthContext.js';
 
-import Anyroute from './routes/AnyRoute.jsx';
-import Protectedroute from './routes/ProtectedRoute.jsx';
-import Unprotectedroute from './routes/UnprotectedRoute.jsx';
+import Anyroute from './routes/AnyRoute.js';
+import Protectedroute from './routes/ProtectedRoute.js';
+import Unprotectedroute from './routes/UnprotectedRoute.js';
 
-import LoginPage from './pages/Login.jsx';
-import HomePage from './pages/Home.jsx';
-import ProfilePage from './pages/Profile.jsx';
-import LogoutPage from './pages/Logout.jsx';
-import AccountSettingsPage from './pages/AccountSettings.jsx';
-import { ModalProvider } from './contexts/ModalContext.jsx';
-import { ToastProvider } from './contexts/ToastContext.jsx';
-import SignupPage from './pages/Signup.jsx';
-import TermsOfServicesPage from './pages/TermsOfServices.jsx';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage.jsx'; // Brave blocks the filename "privacypolicy"
+import LoginPage from './pages/Login.js';
+import HomePage from './pages/Home.js';
+import ProfilePage from './pages/Profile.js';
+import LogoutPage from './pages/Logout.js';
+import AccountSettingsPage from './pages/AccountSettings.js';
+import { ModalProvider } from './contexts/ModalContext.js';
+import { ToastProvider } from './contexts/ToastContext.js';
+import SignupPage from './pages/Signup.js';
+import TermsOfServicesPage from './pages/TermsOfServices.js';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage.js'; // Brave blocks the filename "privacypolicy"
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>
 		<ToastProvider>
 			<ModalProvider>

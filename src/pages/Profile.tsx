@@ -1,5 +1,5 @@
-import { useAuth } from "../contexts/AuthContext";
-import { useToast } from "../contexts/ToastContext";
+import { useAuth } from "../contexts/AuthContext.js";
+import { useToast } from "../contexts/ToastContext.js";
 
 function ProfilePage() {
 

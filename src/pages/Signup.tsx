@@ -1,18 +1,17 @@
-import { Button, Input } from '../components/CustomComponents';
+import { Button, Input } from '../components/CustomComponents.js';
 import { useEffect, useState } from 'react';
 import srp from "secure-remote-password/client";
-import Axios from '../api/Axios';
-import { useToast } from '../contexts/ToastContext';
-import { useAuth } from '../contexts/AuthContext';
+import Axios, { getErrorMessage } from '../api/Axios.js';
+import { useToast } from '../contexts/ToastContext.js';
+import { useAuth } from '../contexts/AuthContext.js';
 import { useNavigate } from 'react-router';
-import Turnstile, { useTurnstile } from 'react-turnstile';
-
-const TURNSTILE = import.meta.env.VITE_TURNSTILE;
-const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
+import { Turnstile, useTurnstile } from "react-turnstile";
+import { getTurnstileEnabled, getTurnstileKey } from '../env.js';
+import { blobToBase64 } from '../helpers/Tools.js';
 
 function SignupPage() {
     const turnstile = useTurnstile();
-    const [turnstileToken, setTurnstileToken] = useState(null);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
     const { AddToast } = useToast();
     const { UpdateUser, setAvatar } = useAuth();
@@ -37,17 +36,18 @@ function SignupPage() {
     const [codeValidity, setCodeValidity] = useState(false);
 
     const [disabled, setDisabled] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     const [codeRequested, setCodeRequested] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
         setDisabled(!Object.values(validity).every(Boolean));
     }, [validity]);
 
     const navigate = useNavigate();
 
-    const Signup = async (e) => {
+    const Signup = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
@@ -55,6 +55,7 @@ function SignupPage() {
             const srpPrivatekey = srp.derivePrivateKey(srpSalt, userData.email, userData.password);
             const srpVerifier = srp.deriveVerifier(srpPrivatekey);
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { password, passwordcheck, ...data } = userData;
             await Axios.post('/auth/signup', { ...data, srpSalt, srpVerifier, turnstileToken }, {
                 withCredentials: true
@@ -62,11 +63,12 @@ function SignupPage() {
 
             setCodeRequested(true);
         } catch (err) {
-            AddToast(err?.response?.data?.message ?? "Error", "error");
+            turnstile?.reset();
+            AddToast(getErrorMessage(err), "error");
         }
     };
 
-    const Verify = async (e) => {
+    const Verify = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
@@ -74,22 +76,30 @@ function SignupPage() {
                 withCredentials: true
             });
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { avatar, ...newUser } = response.data.user;
             UpdateUser(newUser);
-            setAvatar(response.data.user.avatar);
-            localStorage.setItem("avatar", response.data.user.avatar);
+
+            const avatarResponse = await Axios.get(response.data.user.avatar, { responseType: "blob" });
+            const avatarBase64 = await blobToBase64(avatarResponse.data);
+
+            setAvatar(avatarBase64);
+            localStorage.setItem("avatar", avatarBase64);
 
             AddToast(response.data.message, "success");
             navigate("/profile");
         } catch (err) {
-            AddToast(err?.response?.data?.message ?? "Error", "error");
+            AddToast(getErrorMessage(err), "error");
         }
     };
 
     useEffect(() => {
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
         if ((userData.email || userData.emailcheck) && userData.email !== userData.emailcheck) return setError("Emails don't match");
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
         if ((userData.password || userData.passwordcheck) && userData.password !== userData.passwordcheck) return setError("Passwords don't match");
 
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
         setError(null);
     }, [userData]);
 
@@ -117,15 +127,15 @@ function SignupPage() {
                     <Input type="password" setValid={(isValid) => setValidity(v => ({ ...v, passwordcheck: isValid })) } className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Password verification' value={userData.passwordcheck} onChange={(e) => { setUserData(prev => ({ ...prev, passwordcheck: e.target.value })); }}/>
                     <p className='text-red-500'>{error || "\u00A0"}</p>
 
-                    {TURNSTILE == "true" && 
+                    {getTurnstileEnabled() && 
                         <Turnstile
-                        sitekey={TURNSTILE_KEY}
+                        sitekey={getTurnstileKey()}
                         onVerify={(token) => {
                             setTurnstileToken(token);
                         }}
                     />}
 
-                    <Button type='submit' style='submit' disabled={disabled || (!turnstileToken && TURNSTILE == "true")} className='mb-6 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl'>
+                    <Button type='submit' style='submit' disabled={disabled || (!turnstileToken && getTurnstileEnabled())} className='mb-6 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl'>
                         Signup
                     </Button>
 

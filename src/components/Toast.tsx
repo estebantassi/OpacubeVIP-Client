@@ -1,16 +1,10 @@
 import { CircleX, CircleCheck, CircleAlert, Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import type { ToastContent } from "../types/types.js";
 
-export const Toast = ({ text, type, duration }) => {
+export const Toast = ({ text, type, duration }: ToastContent) => {
 
     const [progress, setProgress] = useState(0);
-
-    const typeColor = {
-        info: "text-black-500",
-        error: "text-red-500",
-        success: "text-green-500",
-        warning: "text-yellow-500",
-    };
 
     useEffect(() => {
         const start = Date.now();
@@ -31,10 +25,10 @@ export const Toast = ({ text, type, duration }) => {
                     className={`flex gap-2 items-center py-2 px-4`}
                 >
 
-                    {type == "error" && <CircleX className={`shrink-0 ${typeColor[type]}`} />}
-                    {type == "success" && <CircleCheck className={`shrink-0 ${typeColor[type]}`} />}
-                    {type == "info" && <Info className={`shrink-0 ${typeColor[type]}`} />}
-                    {type == "warning" && <CircleAlert className={`shrink-0 ${typeColor[type]}`} />}
+                    {type == "error" && <CircleX className={`shrink-0 text-red-500`} />}
+                    {type == "success" && <CircleCheck className={`shrink-0 text-green-500`} />}
+                    {type == "info" && <Info className={`shrink-0 text-black-500`} />}
+                    {type == "warning" && <CircleAlert className={`shrink-0 text-yellow-500`} />}
 
                     <div className='break-words min-w-0'>
                         {text}

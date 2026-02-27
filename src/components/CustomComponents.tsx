@@ -1,28 +1,47 @@
 import { useState } from "react";
 import { Info } from 'lucide-react';
-import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from "../env";
-import { ValidateEmail, ValidatePassword, ValidateUsername } from "../helpers/Validate";
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from "../env.js";
+import { ValidateEmail, ValidatePassword, ValidateUsername } from "../helpers/Validate.js";
 
-export const Button = ({ disabled = false, children, onClick, style = "none", type = "", className = "" }) => {
+type ButtonContent = {
+    disabled?: boolean;
+    children?: React.ReactNode;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    style?: "none" | "submit" | "secondary" | "danger";
+    type?: undefined | "button" | "submit" | "reset";
+    className?: string;
+};
+
+export const Button = ({ disabled = false, children, onClick, style = "none", type, className = "" }: ButtonContent) => {
 	const baseStyles = `px-4 py-2 rounded font-medium transition-colors hover:cursor-pointer ${disabled ? "opacity-25" : "hover:opacity-75 transition-opacity"}`;
 
-	const typeStyles = {
-		none: "",
-		submit: `bg-black`,
-		secondary: `bg-gray-200 text-gray-800`,
-		danger: `bg-red-500 text-white`,
+	const styles = {
+		"none": "",
+		"submit": `bg-black`,
+		"secondary": `bg-gray-200 text-gray-800`,
+		"danger": `bg-red-500 text-white`,
 	};
 
 	return (
 		<button
 			disabled={disabled}
 			onClick={onClick}
-			className={`${baseStyles} ${typeStyles[style]} ${className}`}
-			type={`${type}`}
+			className={`${baseStyles} ${styles[style]} ${className}`}
+			type={type}
 		>
 			{children}
 		</button>
 	);
+};
+
+type InputContent = {
+    validate?: boolean;
+    setValid?: (isValid: boolean) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
+    value?: string;
+    className?: string;
+	placeholder?: string;
+	type?: string;
 };
 
 export const Input = ({
@@ -33,9 +52,9 @@ export const Input = ({
 	className = "",
 	placeholder = "",
 	type = ""
-}) => {
+} : InputContent) => {
 
-	const [error, setError] = useState(null);
+	const [error, setError] = useState<string | null>(null);
 	const [show, setShow] = useState(false);
 
 	return (

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import axios from '../api/Axios';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.js';
 
 function LogoutPage() {
 
@@ -12,6 +11,10 @@ function LogoutPage() {
         UpdateUser(null);
         navigate("/home");
     }, []);
+
+    return (
+        <></>
+    );
 }
 
 export default LogoutPage;

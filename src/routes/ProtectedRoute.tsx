@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext.js";
 import { useEffect } from "react";
-import Anyroute from "./AnyRoute";
+import Anyroute from "./AnyRoute.js";
 
 function Protectedroute() {
     const { user } = useAuth();

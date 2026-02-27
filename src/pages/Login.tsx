@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Button, Input } from '../components/CustomComponents';
-import Axios from '../api/Axios';
+import { useState } from 'react';
+import { Button, Input } from '../components/CustomComponents.js';
+import Axios, { getErrorMessage } from '../api/Axios.js';
 import srp from "secure-remote-password/client";
-import { useToast } from '../contexts/ToastContext';
-import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext.js';
+import { useAuth } from '../contexts/AuthContext.js';
 import { useNavigate } from 'react-router';
 import { Turnstile, useTurnstile } from "react-turnstile";
-
-const API_URL = import.meta.env.VITE_API_URL;
-const TURNSTILE = import.meta.env.VITE_TURNSTILE;
-const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
+import { getApiUrl, getTurnstileEnabled, getTurnstileKey } from '../env.js';
+import { blobToBase64 } from '../helpers/Tools.js';
 
 function LoginPage() {
     const turnstile = useTurnstile();
-    const [turnstileToken, setTurnstileToken] = useState(null);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
     const { AddToast } = useToast();
     const { UpdateUser, setAvatar } = useAuth();
@@ -25,7 +23,7 @@ function LoginPage() {
     });
 
 
-    const Login = async (e) => {
+    const Login = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
@@ -48,16 +46,21 @@ function LoginPage() {
                 return AddToast("There was an error verifying the server's authenticity", "error");
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { avatar, ...newUser } = checkPassword.data.user;
             UpdateUser(newUser);
-            setAvatar(checkPassword.data.user.avatar);
-            localStorage.setItem("avatar", checkPassword.data.user.avatar);
+
+            const avatarResponse = await Axios.get(checkPassword.data.user.avatar, { responseType: "blob" });
+            const avatarBase64 = await blobToBase64(avatarResponse.data);
+
+            setAvatar(avatarBase64);
+            localStorage.setItem("avatar", avatarBase64);
 
             AddToast(checkPassword.data.message, "success");
             navigate("/profile");
         } catch (err) {
             turnstile?.reset();
-            AddToast(err?.response?.data?.message ?? "Error", "error");
+            AddToast(getErrorMessage(err), "error");
         }
     };
 
@@ -67,27 +70,27 @@ function LoginPage() {
                 <form className={`px-4 sm:my-20 sm:rounded-xl bg-content flex justify-center flex-col items-center w-full min-h-screen sm:min-h-full lg:w-[50vw] sm:w-[75vw] py-6`} onSubmit={Login}>
 
                     <div className='w-full flex flex-col items-center gap-2'>
-                        <Button type="button" className='bg-[#4285F4] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=google"}>
+                        <Button type="button" className='bg-[#4285F4] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = getApiUrl() + "/auth/oauth/login?provider=google"}>
                             <img className='w-8 bg-white p-1 absolute left-1' src="brands/google.svg" alt="" />
                             Continue with Google
                         </Button>
 
-                        <Button type="button" className='bg-[#FC6D26] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=gitlab"}>
+                        <Button type="button" className='bg-[#FC6D26] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = getApiUrl() + "/auth/oauth/login?provider=gitlab"}>
                             <img className='w-8 bg-white p-1 absolute left-1' src="brands/gitlab.svg" alt="" />
                             Continue with Gitlab
                         </Button>
 
-                        <Button type="button" className='bg-[#5865F2] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=discord"}>
+                        <Button type="button" className='bg-[#5865F2] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = getApiUrl() + "/auth/oauth/login?provider=discord"}>
                             <img className='w-8 bg-white p-1 absolute left-1' src="brands/discord.svg" alt="" />
                             Continue with Discord
                         </Button>
 
-                        <Button type="button" className='bg-[#181717] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=github"}>
+                        <Button type="button" className='bg-[#181717] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = getApiUrl() + "/auth/oauth/login?provider=github"}>
                             <img className='w-8 bg-white p-1 absolute left-1' src="brands/github.svg" alt="" />
                             Continue with Github
                         </Button>
 
-                        <Button type="button" className='bg-[#9146FF] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = API_URL + "/auth/oauth/login?provider=twitch"}>
+                        <Button type="button" className='bg-[#9146FF] w-full lg:w-[50%] sm:w-[75%] relative flex justify-center items-center' onClick={() => window.location.href = getApiUrl() + "/auth/oauth/login?provider=twitch"}>
                             <img className='w-8 bg-white p-1 absolute left-1' src="brands/twitch.svg" alt="" />
                             Continue with Twitch
                         </Button>
@@ -100,15 +103,15 @@ function LoginPage() {
                     <Input type="email" className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Email' value={userData.email} onChange={(e) => { setUserData(prev => ({ ...prev, email: e.target.value })); }} />
                     <Input validate={false} type="password" className='w-full lg:w-[50%] sm:w-[75%]' placeholder='Password' value={userData.password} onChange={(e) => { setUserData(prev => ({ ...prev, password: e.target.value })); }} />
                     
-                    {TURNSTILE == "true" && 
+                    {getTurnstileEnabled() && 
                         <Turnstile
-                        sitekey={TURNSTILE_KEY}
+                        sitekey={getTurnstileKey()}
                         onVerify={(token) => {
                             setTurnstileToken(token);
                         }}
                     />}
 
-                    <Button disabled={!turnstileToken && TURNSTILE == "true"} type='submit' style='submit' className='mt-4 mb-4 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl mx-4'>
+                    <Button disabled={!turnstileToken && getTurnstileEnabled()} type='submit' style='submit' className='mt-4 mb-4 w-[75%] lg:w-[25%] sm:w-[50%] rounded-xl mx-4'>
                         Login
                     </Button>
 

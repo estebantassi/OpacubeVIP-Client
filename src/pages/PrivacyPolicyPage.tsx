@@ -52,6 +52,36 @@ export default function PrivacyPolicyPage() {
                         We do not use personal data for advertising, profiling, or automated decision-making.
                     </p>
 
+                    <h2>4. Data Retention</h2>
+
+                    <p>
+                        We retain personal data for as long as your account remains active. If you delete your account, your personal data is deleted.
+                    </p>
+
+                    <h2>5. Your Rights</h2>
+
+                    <p>
+                        Under applicable data protection laws, including the GDPR, you have the following rights regarding your personal data:
+                    </p>
+
+                    <div>
+                        <p><strong>-Right of Access:</strong> You may request a copy of the personal data we hold about you.</p>
+                        <p><strong>-Right to Rectification:</strong> You may request correction of inaccurate or incomplete data.</p>
+                        <p><strong>-Right to Erasure:</strong> You may request deletion of your personal data, subject to legal obligations.</p>
+                        <p><strong>-Right to Restriction:</strong> You may request limitation of processing in certain circumstances.</p>
+                        <p><strong>-Right to Data Portability:</strong> You may request a copy of your data in a structured format.</p>
+                        <p><strong>-Right to Object:</strong> You may object to processing where applicable.</p>
+                    </div>
+
+                    <p>
+                        You can exercise these rights by contacting us at 
+                        <a href="mailto:youremail@example.com">youremail@example.com</a>.
+                    </p>
+
+                    <p>
+                    If you believe your data protection rights have been violated, you have the right to lodge a complaint with your local supervisory authority. In France, this authority is the CNIL.
+                    </p>
+
 
                     <p>WORK IN PROGRESS</p>
 
